@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>轮播图</title>
+	<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+		}
+
+		/*p{
+			width: 50px;
+			right: 0px;
+			top: 0px;
+			position: absolute;
+			overflow: hidden;
+		}*/
+		ul,li{
+			list-style: none;
+			text-align: center;
+		}
+		.laba{
+			margin-left: 100px;
+			top: 5px;
+			position: absolute;
+		}
+/*		.box1{
+			background-color: #ccc;
+			top: 0px;
+			position: absolute;
+			height: 30px;
+			
+		}*/
+		.box2{
+			
+			width: 100%;
+			height: 30px;
+			top: 0px;
+			position:absolute;
+			overflow: hidden;
+			background-color: #ccc;
+			
+		}
+		.text{
+			/*background-color: red;*/
+			top: 0px;
+			width: 1300px;
+			height: 30px;
+			overflow: hidden;
+			left: 120px;
+			position: absolute;
+
+		}
+		.p{
+			left:1200px;
+			top: 2px;
+			position: relative;
+			overflow: hidden;
+			font-size: 15px;
+		}
+
+		.box{
+			width: 1200px;
+			height: 382px;
+			border:1px solid red;
+			margin: 100px auto;
+			position: relative;
+			overflow: hidden;
+		}
+		div{
+			display: block;
+		}
+		.slider{
+			width: 8400px;
+			position: absolute;
+			left: -1200px;
+		}
+		.slide{
+			width: 1200px;
+			overflow: hidden;
+			float: left;
+		}
+		.box>span{
+			display: block;
+			width: 30px;
+			height: 50px;
+			text-align: center;
+			cursor: pointer;
+			color:white;
+			top: 175px;
+			line-height: 50px;
+			background: rgb(255,0,0);
+			font-size: 30px;
+			position: absolute;
+			opacity: 0;
+		}
+		#left{
+			left: 30px;
+		}
+		#right{
+			right: 30px;
+		}
+		.nav{
+			position: absolute;
+			left: 500px;
+			bottom: 20px;
+		}
+		.nav>li{
+			float: left;
+			width: 20px;
+			height: 20px;
+			background: #ccc;
+			/*text-align: center;*/
+			cursor: pointer;
+			margin: 0 10px;
+			border-radius: 50%;
+		}
+		.nav .active{
+			background: red;
+		}
+	</style>
+	<script type="text/javascript" src="animate.js"></script>
+</head>
+<body>
+	<div class="box" id="box">
+		<div class="slider" id="slider">
+			<div class="slide"><img src="b5.png" alt=""></div>
+			<div class="slide"><img src="b1.png" alt=""></div>
+			<div class="slide"><img src="b2.png" alt=""></div>
+			<div class="slide"><img src="b3.png" alt=""></div>
+			<div class="slide"><img src="b4.png" alt=""></div>
+			<div class="slide"><img src="b5.png" alt=""></div>
+			<div class="slide"><img src="b1.png" alt=""></div>
+		</div>
+		<span id="left"><</span>
+		<span id="right">></span>
+		<ul class="nav" id="nav">
+			<li class="active">1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+		</ul>
+	</div>
+
+
+
+	<div class="box2" id="box2">
+		<img src="a15.png"  class="laba">
+		<div class="text" id="text">
+			<p class="p" id="p">【温馨提示】最近有不少不法分子在网上骗人，请大家注意！！！</p>
+		</div>
+	</div>
+	<script type="text/javascript">
+
+		var text = document.getElementById('text');
+		var box = document.getElementById('box');
+		var oNavlist = document.getElementById('nav').children;
+		var slider = document.getElementById('slider');
+		var left = document.getElementById('left');
+		var right = document.getElementById('right');
+		var index = 1;
+		var timer;
+		var isMoving = false;
+
+
+		window.onload = function(){
+		
+				var timer = setInterval(function(){
+					var now = parseInt(getStyle(p,'left'));
+					 console.log(now);
+					if(now == -440){
+						//clearInterval(timer);
+						p.style.left = 1300 +'px';
+					}
+					else{
+						p.style.left = now -20 +'px';
+					}
+				},200);
+
+		}
+
+		//图片移动函数
+		function next(){
+       		index++;
+       		change();
+       		animate(slider,{left:-1200*index},function(){
+       			if(index === 6){
+       				slider.style.left="-1200px";
+       				index = 1;
+       			}
+       		});
+       	}
+       	function last(){
+       		index--;
+       		change();
+       		animate(slider,{left:-1200*index},function(){
+       			if(index === 0){
+       				slider.style.left="-6000px";
+       				index = 5;
+       			}
+       		});
+       	}
+
+       	var timer = setInterval(next,3000);
+       	//滑入
+       	box.onmouseover = function(){
+       		animate(left,{opacity:50});
+       		animate(right,{opacity:50}); 
+       		clearInterval(timer)
+       	}
+       	//滑出
+       	box.onmouseout = function(){
+       		animate(left,{opacity:0});
+       		animate(right,{opacity:0});
+       		timer = setInterval(next,3000)
+       	}
+
+       	right.onclick = next;
+
+       	left.onclick = last;
+
+       	for(var i =0;i<oNavlist.length;i++){
+       		oNavlist[i].idx = i;
+       		oNavlist[i].onclick = function(){
+       			index = this.idx+1;
+       			change();
+       			animate(slider,{left:-1200*(index)});
+
+       		}
+       	}
+
+       	function change(){
+       		for(var i =0;i<oNavlist.length;i++){
+       			oNavlist[i].className = '';
+       		}
+       		if(index === 6){
+       			oNavlist[0].className = 'active';
+       		}
+       		else if(index===0){
+       			oNavlist[4].className = 'active';
+       		}
+       		else{
+       			oNavlist[index-1].className = 'active';
+       		}
+       	}
+
+
+	</script>
+</body>
+</html>
